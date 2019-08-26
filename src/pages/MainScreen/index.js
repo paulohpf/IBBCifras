@@ -1,17 +1,49 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { createDrawerNavigator } from 'react-navigation';
-import DrawerContainer from '../../components/DrawerContainer';
+import { get_tabs } from '../../store/actions';
+import { FlatList } from 'react-native-gesture-handler';
 
-const MainScreen = ({modules, dispatch}) => {
+import { TabListItem, TabTitle, IconStyled, StyledText } from './styles';
 
-    console.log(modules);
-    console.log(dispatch);
+const MainScreen = ({ tabs, dispatch }) => {
+    useEffect(() => {
+        async function loadTabs() {
+            try {
+                const response = await fetch(
+                    'http://cifras.betel-bauru.com.br'
+                );
+
+                const data = await response.json();
+
+                dispatch(get_tabs(data));
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        loadTabs();
+    }, [])
+
+    console.log(tabs.tabs);
 
     const _MainScreen = (
         <View>
-            <Text>Teste</Text>
+            <FlatList
+                data={tabs.tabs}
+                keyExtractor={tab => String(tab.id)}
+                renderItem={({ item }) => (
+                    <TabListItem>
+                        <IconStyled
+                            name="playlist-play"
+                        />
+                        <TabTitle><StyledText>{item.title}</StyledText></TabTitle>
+                        <IconStyled
+                            name="bookmark"
+                        />
+                    </TabListItem>
+                )}
+            />
         </View>
     );
 
@@ -29,5 +61,5 @@ const MainScreen = ({modules, dispatch}) => {
 // );
 
 export default connect(state => ({
-    modules: state
+    tabs: state.tabs
 }))(MainScreen);
