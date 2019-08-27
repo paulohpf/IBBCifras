@@ -1,4 +1,4 @@
-import { TOGGLE_MENU, GET_TABS } from './types';
+import { TOGGLE_MENU, GET_TABS, BOOKMARK_TAB } from './types';
 
 export const toggle_menu = (data) => {
     return {
@@ -8,12 +8,18 @@ export const toggle_menu = (data) => {
 }
 
 export const get_tabs = (data) => {
-    console.log(data)
     return {
         type: GET_TABS,
         total: data.total,
         offset: data.offset,
         rows: data.rows,
+        tabs: data.tabs
+    }
+}
+
+export const bookmark_tab = (data) => {
+    return {
+        type: BOOKMARK_TAB,
         tabs: data.tabs
     }
 }

@@ -1,4 +1,4 @@
-import { GET_TABS } from '../types';
+import { GET_TABS, BOOKMARK_TAB } from '../types';
 
 const initialState = {
     total: 0,
@@ -17,6 +17,11 @@ const tabsReducer = (state = initialState, action) => {
                 rows: action.rows,
                 tabs: action.tabs
             }
+            case BOOKMARK_TAB:
+                return {
+                    ...state,
+                    tabs: action.tabs
+                }
         default:
             return state;
     }
